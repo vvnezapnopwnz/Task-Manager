@@ -12,12 +12,15 @@
       "build-frontend": "NODE_ENV=production webpack --mode production",
       "build": "npm run build-configs && npm run build-frontend && npm run build-server && npm run build-db",
       "start": "NODE_ENV=production node dist/server/bin/server.js"
-    },
-    "jest": {
+   },
+   "engines": {
+      "node": "14.x"
+   },
+   "jest": {
       "modulePathIgnorePatterns": [
-        "<rootDir>/__tests__/helpers/"
+         "<rootDir>/__tests__/helpers/"
       ]
-    },
+   },
    "author": "vvnezapnopwnz",
    "license": "ISC",
    "repository": {
@@ -49,6 +52,7 @@
       "mini-css-extract-plugin": "^1.6.0",
       "objection": "^2.2.15",
       "objection-unique": "^1.2.2",
+      "pg": "^8.7.1",
       "pino-pretty": "^5.0.2",
       "point-of-view": "^4.14.0",
       "pug": "^3.0.2",
