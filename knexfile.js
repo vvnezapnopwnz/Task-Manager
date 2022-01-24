@@ -1,10 +1,9 @@
+// @ts-check
+
 const path = require('path');
 
 const migrations = {
   directory: path.join(__dirname, 'server', 'migrations'),
-};
-const seeds = {
-  directory: path.join(__dirname, 'server', 'seeds'),
 };
 
 module.exports = {
@@ -14,11 +13,7 @@ module.exports = {
       filename: './database.sqlite',
     },
     useNullAsDefault: true,
-    pool: {
-      afterCreate: (conn, cb) => conn.run('PRAGMA foreign_keys = ON', cb),
-    },
     migrations,
-    seeds,
   },
   test: {
     client: 'sqlite3',
@@ -27,12 +22,9 @@ module.exports = {
     migrations,
   },
   production: {
-    client: 'pg',
+    client: 'sqlite3',
     connection: {
-      connectionString: process.env.DATABASE_URL,
-      ssl: {
-        rejectUnauthorized: false,
-      },
+      filename: './database.sqlite',
     },
     useNullAsDefault: true,
     migrations,

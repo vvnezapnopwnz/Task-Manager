@@ -1,22 +1,18 @@
+setup: prepare install db-migrate
+
 install:
 	npm install
-
-dev-db:
-	make db-migrate db-seed
 
 db-migrate:
 	npx knex migrate:latest
 
-db-seed:
-	npx knex seed:run
-
 build:
 	npm run build
 
-start:
-	heroku local -f Procfile
+prepare:
+	cp -n .env.example .env || true
 
-dev:
+start:
 	heroku local -f Procfile.dev
 
 start-backend:
@@ -30,6 +26,3 @@ lint:
 
 test:
 	npm test -s
-	
-test-coverage:
-	npm test -- --coverage --coverageProvider=v8
