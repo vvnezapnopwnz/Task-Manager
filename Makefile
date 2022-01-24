@@ -1,7 +1,7 @@
 setup: prepare install db-migrate
 
 install:
-	npm install
+	npm install --save-dev @babel/core @babel/cli @babel/node @babel/preset-env
 
 db-migrate:
 	npx knex migrate:latest
