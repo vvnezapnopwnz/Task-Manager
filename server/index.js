@@ -1,11 +1,11 @@
 // @ts-check
 // libs, plugins
-import dotenv from 'dotenv';
-import path from 'path';
-import fastify from 'fastify';
+import dotenv from 'dotenv'; // OK
+import path from 'path'; // OK
+import fastify from 'fastify'; // OK
 import fastifyStatic from 'fastify-static';
-import fastifyErrorPage from 'fastify-error-page';
-import pointOfView from 'point-of-view';
+import fastifyErrorPage from 'fastify-error-page'; // OK
+import pointOfView from 'point-of-view'; // OK
 import fastifyFormbody from 'fastify-formbody';
 import fastifySecureSession from 'fastify-secure-session';
 import fastifyPassport from 'fastify-passport';
@@ -15,14 +15,14 @@ import { plugin as fastifyReverseRoutes } from 'fastify-reverse-routes';
 import fastifyMethodOverride from 'fastify-method-override';
 import fastifyObjectionjs from 'fastify-objectionjs';
 import qs from 'qs';
-import Pug from 'pug';
+import Pug from 'pug'; // OK
 import i18next from 'i18next';
 import ru from './locales/ru.js';
 // @ts-ignore
 import webpackConfig from '../webpack.config.babel.js';
 // local plugins
 import addRoutes from './routes/index.js';
-import getHelpers from './helpers/index.js';
+import getHelpers from './helpers/index.js'; // OK
 import knexConfig from '../knexfile.js';
 import models from './models/index.js';
 import FormStrategy from './lib/passportStrategies/FormStrategy.js';
@@ -57,8 +57,8 @@ const setUpViews = (app) => {
 
 const setUpStaticAssets = (app) => {
   const pathPublic = isProduction
-    ? path.join(__dirname, '..', 'public')
-    : path.join(__dirname, '..', 'dist', 'public');
+    ? path.join(__dirname, '..', 'public') // вопросы
+    : path.join(__dirname, '..', 'dist', 'public'); // вопросы
   app.register(fastifyStatic, {
     root: pathPublic,
     prefix: '/assets/',
