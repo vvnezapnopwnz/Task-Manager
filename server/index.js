@@ -1,5 +1,5 @@
 // @ts-check
-
+// libs, plugins
 import dotenv from 'dotenv';
 import path from 'path';
 import fastify from 'fastify';
@@ -20,7 +20,7 @@ import i18next from 'i18next';
 import ru from './locales/ru.js';
 // @ts-ignore
 import webpackConfig from '../webpack.config.babel.js';
-
+// local plugins
 import addRoutes from './routes/index.js';
 import getHelpers from './helpers/index.js';
 import knexConfig from '../knexfile.js';
@@ -31,7 +31,8 @@ dotenv.config();
 const mode = process.env.NODE_ENV || 'development';
 const isProduction = mode === 'production';
 const isDevelopment = mode === 'development';
-
+// установка шаблонизатора : Pug,
+// определение переменных в defaultContext, доступных для всех отображений (views)
 const setUpViews = (app) => {
   const { devServer } = webpackConfig;
   const devHost = `http://${devServer.host}:${devServer.port}`;
