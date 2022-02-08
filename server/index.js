@@ -26,7 +26,7 @@ import getHelpers from './helpers/index.js'; // OK
 import knexConfig from '../knexfile.js';
 import models from './models/index.js';
 import FormStrategy from './lib/passportStrategies/FormStrategy.js';
-
+// TODO изучить библиотеки fastify
 dotenv.config();
 const mode = process.env.NODE_ENV || 'development';
 const isProduction = mode === 'production';
@@ -124,7 +124,7 @@ const registerPlugins = (app) => {
 export default () => {
   const app = fastify({
     logger: {
-      prettyPrint: isDevelopment,
+      // prettyPrint: isDevelopment,
     },
   });
 
