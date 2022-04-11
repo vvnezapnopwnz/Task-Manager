@@ -9,8 +9,9 @@
    "scripts": {
       "prebuild": "rm -rf dist",
       "test": "jest --verbose --runInBand",
-      "build": "webpack",
-      "start": "fastify start server/plugin.js -l debug -P"
+      "build-frontend": "webpack",
+      "start": "fastify start server/plugin.js -l debug -P",
+      "build": "webpack --config webpack.config.js"
    },
    "jest": {
       "modulePathIgnorePatterns": [
