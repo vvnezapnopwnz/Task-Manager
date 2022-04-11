@@ -27,10 +27,9 @@ export const test = {
 };
 
 export const production = {
-  client: 'pg',
+  client: 'sqlite3',
   connection: {
-    connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false },
+    filename: './database.sqlite',
   },
   useNullAsDefault: true,
   migrations,
