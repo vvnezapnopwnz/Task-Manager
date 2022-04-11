@@ -1,3 +1,4 @@
+# export NODE_OPTIONS=--openssl-legacy-provider
 setup: prepare install db-migrate
 
 install:
@@ -13,7 +14,7 @@ prepare:
 	cp -n .env .env || true
 
 start:
-	heroku local -f Procfile.dev
+	heroku local -f Procfile
 
 start-backend:
 	npm start -- --watch --verbose-watch
