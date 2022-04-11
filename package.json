@@ -1,5 +1,5 @@
 {
-   "name": "fastify-nodejs-application",
+   "name": "@hexlet/code",
    "version": "0.1.0",
    "type": "module",
    "description": "fastify-nodejs-application",
@@ -20,16 +20,16 @@
          "dotenv/config"
       ]
    },
-   "author": "Stanislav Dzisiak",
+   "author": "vvnezapnopwnz",
    "license": "ISC",
    "repository": {
       "type": "git",
-      "url": "git+https://github.com/hexlet-boilerplates/fastify-nodejs-application.git"
+      "url": "git+https://github.com/vvnezapnopwnz/backend-project-lvl4.git"
    },
    "bugs": {
-      "url": "https://github.com/hexlet-boilerplates/fastify-nodejs-application/issues"
+      "url": "https://github.com/vvnezapnopwnz/backend-project-lvl4/issues"
    },
-   "homepage": "https://github.com/hexlet-boilerplates/fastify-nodejs-application.git#readme",
+   "homepage": "https://github.com/vvnezapnopwnz/backend-project-lvl4.git#readme",
    "dependencies": {
       "@vscode/sqlite3": "^5.0.7",
       "bootstrap": "^5.1.3",
