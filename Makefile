@@ -1,7 +1,7 @@
 setup: prepare install db-migrate
 
 install:
-	npm install --save-dev @babel/core @babel/cli @babel/node @babel/preset-env
+	npm install
 
 db-migrate:
 	npx knex migrate:latest
@@ -13,16 +13,13 @@ prepare:
 	cp -n .env.example .env || true
 
 start:
-	heroku local -f Procfile
-
-dev:
 	heroku local -f Procfile.dev
 
 start-backend:
-	npx nodemon --exec npx babel-node server/bin/server.js
+	npm start -- --watch --verbose-watch --ignore-watch='node_modules .git .sqlite'
 
 start-frontend:
-	npx webpack serve
+	npx webpack --watch --progress
 
 lint:
 	npx eslint .

@@ -1,42 +1,36 @@
 // @ts-check
-// libs, plugins
-import dotenv from 'dotenv'; // OK
-import path from 'path'; // OK
-import fastify from 'fastify'; // OK
+
+import { fileURLToPath } from 'url';
+import path from 'path';
 import fastifyStatic from 'fastify-static';
-import fastifyErrorPage from 'fastify-error-page'; // OK
-import pointOfView from 'point-of-view'; // OK
+import fastifyErrorPage from 'fastify-error-page';
+
+import pointOfView from 'point-of-view';
 import fastifyFormbody from 'fastify-formbody';
 import fastifySecureSession from 'fastify-secure-session';
 import fastifyPassport from 'fastify-passport';
 import fastifySensible from 'fastify-sensible';
-// import fastifyFlash from 'fastify-flash';
 import { plugin as fastifyReverseRoutes } from 'fastify-reverse-routes';
 import fastifyMethodOverride from 'fastify-method-override';
 import fastifyObjectionjs from 'fastify-objectionjs';
 import qs from 'qs';
-import Pug from 'pug'; // OK
+import Pug from 'pug';
 import i18next from 'i18next';
 import ru from './locales/ru.js';
 // @ts-ignore
-import webpackConfig from '../webpack.config.babel.js';
-// local plugins
+
 import addRoutes from './routes/index.js';
-import getHelpers from './helpers/index.js'; // OK
-import knexConfig from '../knexfile.js';
+import getHelpers from './helpers/index.js';
+import * as knexConfig from '../knexfile.js';
 import models from './models/index.js';
 import FormStrategy from './lib/passportStrategies/FormStrategy.js';
-// TODO изучить библиотеки fastify
-dotenv.config();
+
+const __dirname = fileURLToPath(path.dirname(import.meta.url));
+
 const mode = process.env.NODE_ENV || 'development';
-const isProduction = mode === 'production';
-const isDevelopment = mode === 'development';
-// установка шаблонизатора : Pug,
-// определение переменных в defaultContext, доступных для всех отображений (views)
+// const isDevelopment = mode === 'development';
+
 const setUpViews = (app) => {
-  const { devServer } = webpackConfig;
-  const devHost = `http://${devServer.host}:${devServer.port}`;
-  const domain = isDevelopment ? devHost : '';
   const helpers = getHelpers(app);
   app.register(pointOfView, {
     engine: {
@@ -45,7 +39,7 @@ const setUpViews = (app) => {
     includeViewExtension: true,
     defaultContext: {
       ...helpers,
-      assetPath: (filename) => `${domain}/assets/${filename}`,
+      assetPath: (filename) => `/assets/${filename}`,
     },
     templates: path.join(__dirname, '..', 'server', 'views'),
   });
@@ -56,21 +50,19 @@ const setUpViews = (app) => {
 };
 
 const setUpStaticAssets = (app) => {
-  const pathPublic = isProduction
-    ? path.join(__dirname, '..', 'public') // вопросы
-    : path.join(__dirname, '..', 'dist', 'public'); // вопросы
+  const pathPublic = path.join(__dirname, '..', 'dist');
   app.register(fastifyStatic, {
     root: pathPublic,
     prefix: '/assets/',
   });
 };
 
-const setupLocalization = () => {
-  i18next
+const setupLocalization = async () => {
+  await i18next
     .init({
       lng: 'ru',
       fallbackLng: 'en',
-      debug: isDevelopment,
+      // debug: isDevelopment,
       resources: {
         ru,
       },
@@ -121,16 +113,11 @@ const registerPlugins = (app) => {
   });
 };
 
-export default () => {
-  const app = fastify({
-    logger: {
-      // prettyPrint: isDevelopment,
-    },
-  });
-
+// eslint-disable-next-line no-unused-vars
+export default async (app, options) => {
   registerPlugins(app);
 
-  setupLocalization();
+  await setupLocalization();
   setUpViews(app);
   setUpStaticAssets(app);
   addRoutes(app);
