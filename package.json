@@ -7,7 +7,6 @@
       "node": ">=16.x"
    },
    "scripts": {
-      "prebuild": "rm -rf dist",
       "test": "jest --verbose --runInBand",
       "build-frontend": "webpack",
       "start": "fastify start server/plugin.js -l debug -P",
@@ -60,7 +59,8 @@
       "pug": "^3.0.2",
       "qs": "^6.10.3",
       "sqlite3": "^5.0.2",
-      "webpack": "^5.70.0"
+      "webpack": "^5.70.0",
+      "dotenv": "^16.0.0"
    },
    "devDependencies": {
       "@jest/globals": "^27.5.1",
@@ -68,7 +68,6 @@
       "@types/node": "^17.0.23",
       "css-loader": "^6.7.1",
       "eslint": "^8.11.0",
-      "dotenv": "^16.0.0",
       "nodemon": "^2.0.15",
       "eslint-config-airbnb-base": "^15.0.0",
       "eslint-plugin-import": "^2.25.4",
