@@ -9,7 +9,7 @@
    "scripts": {
       "test": "jest --verbose --runInBand",
       "build-frontend": "webpack",
-      "start": "fastify start server/plugin.js -l debug -P",
+      "start": "fastify start server/plugin.js -l debug -P -a 0.0.0.0",
       "build": "webpack --config webpack.config.js"
    },
    "jest": {

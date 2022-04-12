@@ -13,7 +13,6 @@ import fastifySensible from 'fastify-sensible';
 import { plugin as fastifyReverseRoutes } from 'fastify-reverse-routes';
 import fastifyMethodOverride from 'fastify-method-override';
 import fastifyObjectionjs from 'fastify-objectionjs';
-import 'dotenv/config';
 import qs from 'qs';
 import Pug from 'pug';
 import i18next from 'i18next';
