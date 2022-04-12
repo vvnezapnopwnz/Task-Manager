@@ -7,10 +7,9 @@
       "node": ">=16.x"
    },
    "scripts": {
-      "prebuild": "rm -rf dist",
-      "test": "jest --verbose --runInBand",
+      "test": "jest --verbose",
       "build-frontend": "webpack",
-      "start": "fastify start server/plugin.js -l info -P",
+      "start": "fastify start server/plugin.js -l debug -P",
       "build": "webpack --config webpack.config.js"
    },
    "jest": {
@@ -75,6 +74,7 @@
       "jest-cli": "^27.5.1",
       "pino-pretty": "^7.5.4",
       "style-loader": "^3.3.1",
-      "webpack-cli": "^4.9.2"
+      "webpack-cli": "^4.9.2",
+      "nodemon": "^2.0.15"
    }
 }

@@ -1,4 +1,3 @@
-# export NODE_OPTIONS=--openssl-legacy-provider
 setup: prepare install db-migrate
 
 install:
@@ -17,7 +16,7 @@ start:
 	heroku local -f Procfile
 
 start-backend:
-	npm start -- --watch --verbose-watch
+	npm start -- --watch --verbose-watch --ignore-watch='node_modules .git .sqlite'.git .sqlite'
 
 start-frontend:
 	npx webpack --watch --progress
