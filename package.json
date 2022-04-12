@@ -60,7 +60,8 @@
       "qs": "^6.10.3",
       "sqlite3": "^5.0.2",
       "webpack": "^5.70.0",
-      "dotenv": "^16.0.0"
+      "dotenv": "^16.0.0",
+      "webpack-cli": "^4.9.2"
    },
    "devDependencies": {
       "@jest/globals": "^27.5.1",
