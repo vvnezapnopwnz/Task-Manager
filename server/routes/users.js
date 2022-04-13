@@ -28,5 +28,13 @@ export default (app) => {
       }
 
       return reply;
+    })
+    .get('/users/:id/edit', { name: '/users/:id/edit' }, async (req, reply) => {
+      reply.send({ user: req.user, paramUser: req.params.id });
+      return reply;
+    })
+    .delete('/users/:id', { name: '/users#delete' }, async (req, reply) => {
+      reply.send({ user: req.user, paramUser: req.params.id });
+      return reply;
     });
 };

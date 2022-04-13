@@ -40,9 +40,17 @@ export default {
         id: 'ID',
         email: 'Email',
         createdAt: 'Дата создания',
+        actions: 'Действия',
         new: {
           submit: 'Сохранить',
           signUp: 'Регистрация',
+        },
+        edit: {
+          submit: 'Изменить',
+          cancel: 'Отмена',
+        },
+        delete: {
+          submit: 'Удалить',
         },
       },
       welcome: {

@@ -7,9 +7,17 @@ block content
         th= t('views.users.id')
         th= t('views.users.email')
         th= t('views.users.createdAt')
+        th= t('views.users.actions')
     tbody
       each user in users
         tr
           td= user.id
           td= user.email
           td= formatDate(user.createdAt)
+          if isAuthenticated()
+          td
+            div.d-flex.flex-wrap
+              a(href=`users/${user.id}/edit`).btn.btn-primary.me-1= t('views.users.edit.submit')
+              form(action=`/users/${user.id}`, method="post")
+                input(name="_method", type="hidden", value="delete")
+                input(type="submit", value= t('views.users.delete.submit')).btn.btn-danger

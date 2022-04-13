@@ -112,7 +112,6 @@ const registerPlugins = (app) => {
     models,
   });
 };
-
 // eslint-disable-next-line no-unused-vars
 export default async (app, options) => {
   registerPlugins(app);
