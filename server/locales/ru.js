@@ -18,6 +18,13 @@ export default {
           error: 'Не удалось зарегистрировать',
           success: 'Пользователь успешно зарегистрирован',
         },
+        delete: {
+          anotherUserError: 'Вы не можете редактировать или удалять другого пользователя',
+          success: 'Пользователь успешно удалён',
+        },
+        edit: {
+          anotherUserError: 'Вы не можете редактировать или удалять другого пользователя',
+        },
       },
       authError: 'Доступ запрещён! Пожалуйста, авторизируйтесь.',
     },
@@ -44,6 +51,12 @@ export default {
         new: {
           submit: 'Сохранить',
           signUp: 'Регистрация',
+          registerFields: {
+            firstName: 'Имя',
+            lastName: 'Фамилия',
+            email: 'Email',
+            password: 'Пароль',
+          },
         },
         edit: {
           submit: 'Изменить',

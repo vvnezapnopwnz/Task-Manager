@@ -1,6 +1,7 @@
 // @ts-check
 
 import i18next from 'i18next';
+import _ from 'lodash';
 
 export default (app) => {
   app
@@ -15,6 +16,7 @@ export default (app) => {
     })
     .post('/users', async (req, reply) => {
       const user = new app.objection.models.user();
+      console.log(req.body.data);
       user.$set(req.body.data);
 
       try {
@@ -29,12 +31,27 @@ export default (app) => {
 
       return reply;
     })
-    .get('/users/:id/edit', { name: '/users/:id/edit' }, async (req, reply) => {
-      reply.send({ user: req.user, paramUser: req.params.id });
+    .get('/users/:id/edit', { name: '/users/:id/edit', preValidation: app.authenticate }, async (req, reply) => {
+      const currentUserId = req.user.id;
+      const userId = _.toNumber(req.params.id);
+      if (currentUserId !== userId) {
+        req.flash('error', i18next.t('flash.users.edit.anotherUserError'));
+        return reply.redirect(app.reverse('users'));
+      }
+      const user = await app.objection.models.user.query().findById(currentUserId);
+      reply.send(user);
       return reply;
     })
-    .delete('/users/:id', { name: '/users#delete' }, async (req, reply) => {
-      reply.send({ user: req.user, paramUser: req.params.id });
-      return reply;
+    .delete('/users/:id', { name: '/users#delete', preValidation: app.authenticate }, async (req, reply) => {
+      const currentUserId = req.user.id;
+      const userId = _.toNumber(req.params.id);
+      if (currentUserId !== userId) {
+        req.flash('error', i18next.t('flash.users.delete.anotherUserError'));
+        return reply.redirect(app.reverse('users'));
+      }
+      await app.objection.models.user.query().deleteById(currentUserId);
+      await req.logOut();
+      req.flash('success', i18next.t('flash.users.delete.success'));
+      return reply.redirect(app.reverse('users'));
     });
 };
