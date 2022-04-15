@@ -26,7 +26,7 @@ export default (app) => {
         reply.redirect(app.reverse('root'));
       } catch ({ data }) {
         req.flash('error', i18next.t('flash.users.create.error'));
-        reply.render('users/new', { user, errors: data });
+        reply.code(302).render('users/new', { user, errors: data });
       }
 
       return reply;
@@ -39,8 +39,22 @@ export default (app) => {
         return reply.redirect(app.reverse('users'));
       }
       const user = await app.objection.models.user.query().findById(currentUserId);
-      reply.send(user);
+      reply.code(200).render('users/edit', { user });
       return reply;
+    })
+    .patch('/users/edit', { name: '/users/edit#patch', preValidation: app.authenticate }, async (req, reply) => {
+      const userId = req.user.id;
+      const newData = req.body.data;
+      const user = await app.objection.models.user.query().findById(userId);
+      try {
+        await user.$query().patch(newData);
+        req.flash('success', i18next.t('flash.users.edit.success'));
+        return reply.redirect(app.reverse('users'));
+      } catch ({ data: errors }) {
+        user.$set(newData);
+        reply.code(422).render('users/edit', { user, errors });
+        return reply;
+      }
     })
     .delete('/users/:id', { name: '/users#delete', preValidation: app.authenticate }, async (req, reply) => {
       const currentUserId = req.user.id;

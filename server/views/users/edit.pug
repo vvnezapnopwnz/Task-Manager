@@ -1,0 +1,13 @@
+extends ../layouts/application.pug
+
+block header
+  = t('views.users.edit.editUser')
+
+block content
+  +formFor()(action=route(`/users/edit#patch`) method='post').mb-3
+    +input(user, 'firstName', t('views.users.new.registerFields.firstName'), errors)(type='text')
+    +input(user, 'lastName', t('views.users.new.registerFields.lastName'), errors)(type='text')
+    +input(user, 'email', t('views.users.new.registerFields.email'),  errors)(type='email')
+    +input(user, 'password', t('views.users.new.registerFields.password'), errors)(type='password')
+    input(name="_method" type="hidden" value="PATCH")
+    +submit(user)(value=t('views.users.edit.submit'))
