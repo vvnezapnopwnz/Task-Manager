@@ -21,11 +21,11 @@ export default (app) => {
       }
       await req.logIn(user);
       req.flash('success', i18next.t('flash.session.create.success'));
-      return reply.redirect(app.reverse('root'));
+      return reply.redirect(app.reverse('root#index'));
     }))
     .delete('/session', (req, reply) => {
       req.logOut();
       req.flash('info', i18next.t('flash.session.delete.success'));
-      reply.redirect(app.reverse('root'));
+      reply.redirect(app.reverse('root#index'));
     });
 };
