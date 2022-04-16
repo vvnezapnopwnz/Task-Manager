@@ -31,7 +31,7 @@ export default (app) => {
 
       return reply;
     })
-    .get('/users/:id/edit', { name: '/users/:id/edit', preValidation: app.authenticate }, async (req, reply) => {
+    .get('/users/:id/edit', { name: 'users#edit', preValidation: app.authenticate }, async (req, reply) => {
       const currentUserId = req.user.id;
       const userId = _.toNumber(req.params.id);
       if (currentUserId !== userId) {
@@ -42,7 +42,7 @@ export default (app) => {
       reply.code(200).render('users/edit', { user });
       return reply;
     })
-    .patch('/users/edit', { name: '/users/edit#patch', preValidation: app.authenticate }, async (req, reply) => {
+    .patch('/users/edit', { name: 'users/edit#patch', preValidation: app.authenticate }, async (req, reply) => {
       const userId = req.user.id;
       const newData = req.body.data;
       const user = await app.objection.models.user.query().findById(userId);
@@ -56,7 +56,7 @@ export default (app) => {
         return reply;
       }
     })
-    .delete('/users/:id', { name: '/users#delete', preValidation: app.authenticate }, async (req, reply) => {
+    .delete('/users/:id', { name: 'users#delete', preValidation: app.authenticate }, async (req, reply) => {
       const currentUserId = req.user.id;
       const userId = _.toNumber(req.params.id);
       if (currentUserId !== userId) {

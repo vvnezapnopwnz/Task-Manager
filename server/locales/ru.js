@@ -28,6 +28,20 @@ export default {
         },
       },
       authError: 'Доступ запрещён! Пожалуйста, авторизируйтесь.',
+      statuses: {
+        create: {
+          error: 'Не удалось создать статус',
+          success: 'Статус успешно создан',
+        },
+        delete: {
+          success: 'Статус успешно удален',
+          error: 'Не удалось удалить статус',
+        },
+        edit: {
+          success: 'Статус успешно изменён',
+          error: 'Не удалось изменить статус',
+        },
+      },
     },
     layouts: {
       application: {
@@ -35,6 +49,7 @@ export default {
         signIn: 'Вход',
         signUp: 'Регистрация',
         signOut: 'Выход',
+        statuses: 'Статусы',
       },
     },
     views: {
@@ -75,6 +90,23 @@ export default {
           hello: 'Привет от Хекслета!',
           description: 'Практические курсы по программированию',
           more: 'Узнать Больше',
+        },
+      },
+      statuses: {
+        name: 'Наименование',
+        id: 'ID',
+        createdAt: 'Дата создания',
+        actions: 'Действия',
+        new: {
+          create: 'Создание статуса',
+          submit: 'Создать',
+        },
+        edit: {
+          editStatus: 'Изменение статуса',
+          submit: 'Изменить',
+        },
+        delete: {
+          submit: 'Удалить',
         },
       },
     },

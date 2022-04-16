@@ -4,7 +4,7 @@ block header
   = t('views.users.edit.editUser')
 
 block content
-  +formFor()(action=route(`/users/edit#patch`) method='post').mb-3
+  +formFor()(action=route(`users/edit#patch`) method='post').mb-3
     +input(user, 'firstName', t('views.users.new.registerFields.firstName'), errors)(type='text')
     +input(user, 'lastName', t('views.users.new.registerFields.lastName'), errors)(type='text')
     +input(user, 'email', t('views.users.new.registerFields.email'),  errors)(type='email')

@@ -1,6 +1,6 @@
 // @ts-check
 
-import TaskStatus from './taskStatus.cjs';
+import TaskStatus from './TaskStatus.cjs';
 import User from './User.cjs';
 
 export default [

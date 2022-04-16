@@ -1,0 +1,24 @@
+extends ../layouts/application.pug
+
+block content
+  h1.display-4.fw-bold.mt-4= t('layouts.application.statuses')
+  a(href=route('statuses#new')).btn.btn-primary.mx-2= t('views.statuses.new.create')
+  table.table.table-striped
+    thead
+      tr
+        th= t('views.statuses.id')
+        th= t('views.statuses.name')
+        th= t('views.statuses.createdAt')
+        th= t('views.statuses.actions')
+    tbody
+      each taskStatus in taskStatuses
+        tr
+          td= taskStatus.id
+          td= taskStatus.name
+          td= formatDate(taskStatus.createdAt)
+          td
+            div.d-flex.flex-wrap
+              a(href=route('statuses#edit', { id: taskStatus.id })).btn.btn-primary.me-1= t('views.statuses.edit.submit')
+              form(action=route('statuses#destroy', { id: taskStatus.id }), method="post")
+                input(name="_method", type="hidden", value="delete")
+                input(type="submit", value= t('views.statuses.delete.submit')).btn.btn-danger
