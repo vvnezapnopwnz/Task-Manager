@@ -22,6 +22,31 @@ mixin input(entity, propertyName, label, errors = {})
     if !_.isEmpty(propertyErrors)
       .invalid-feedback= propertyErrors.map(({ message }) => message).join('. ')
 
+  
+mixin select(entity, propertyName, placeholder, errors = {}, options)
+  - propertyErrors = _.get(errors, propertyName)
+  - inputId = getInputId(propertyName)
+  - classLine = 'form-control' + (_.isEmpty(propertyErrors) ? '' : ' is-invalid')
+  .mb-3(class=(errors[propertyName] && 'has-danger'))
+    label(
+      for= inputId
+    )= placeholder
+    select(
+      id= inputId
+      name= getInputName(propertyName)
+      class= classLine
+    )&attributes(attributes)
+      if attributes.multiple
+        - selectedIds = _.get(entity, 'labels', []).map(({ id }) => id)
+      else
+        - selectedIds = [entity[propertyName]]
+        option
+      each option in options
+        - isSelected = selectedIds.includes(option.id)
+        option(value= option.id selected= isSelected)= option.name
+    if !_.isEmpty(propertyErrors)
+      .invalid-feedback= propertyErrors.map(({message}) => message).join('. ')
+      
 mixin submit(form = null)
   input(class='btn btn-primary' type='submit')&attributes(attributes)
 
@@ -29,3 +54,22 @@ mixin buttonTo(action, method)
   form(action=action, method="post")
     input(name="_method" type="hidden" value=method)
     input(type='submit')&attributes(attributes)
+
+
+mixin textarea(entity, propertyName, label, errors = {})
+  - inputId= getInputId(propertyName)
+  - propertyErrors= _.get(errors, propertyName)
+  - classLine= 'form-control' + (_.isEmpty(propertyErrors) ? '' : ' is-invalid')
+  .my-3(class=(errors[propertyName] && 'has-danger'))
+    label(
+      for= inputId
+    )= label
+    textarea(
+      id= inputId
+      name= getInputName(propertyName)
+      class= classLine
+      rows= "3"
+    )&attributes(attributes)= _.get(entity, propertyName, '')
+    if !_.isEmpty(propertyErrors)
+      .invalid-feedback= propertyErrors.map(({ message }) => message).join('. ')
+

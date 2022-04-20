@@ -12,7 +12,7 @@ export default (app) => {
       '/statuses/new',
       { name: 'statuses#new', preValidation: app.authenticate },
       async (req, reply) => {
-        const taskStatus = new app.objection.models.taskStatus();
+        const taskStatus = new app.objection.models.taskStatus.query();
         reply.render('taskStatuses/new', { taskStatus });
       },
     )
@@ -43,6 +43,7 @@ export default (app) => {
         const validStatus = await app.objection.models.taskStatus
           .fromJson(req.body.data);
         await app.objection.models.taskStatus.query().insert(validStatus);
+        req.flash('error', i18next.t('flash.statuses.create.success'));
         reply.redirect(app.reverse('statuses#index'));
       } catch ({ data }) {
         req.flash('error', i18next.t('flash.statuses.create.error'));

@@ -50,6 +50,7 @@ export default {
         signUp: 'Регистрация',
         signOut: 'Выход',
         statuses: 'Статусы',
+        tasks: 'Задачи',
       },
     },
     views: {
@@ -103,6 +104,27 @@ export default {
         },
         edit: {
           editStatus: 'Изменение статуса',
+          submit: 'Изменить',
+        },
+        delete: {
+          submit: 'Удалить',
+        },
+      },
+      tasks: {
+        id: 'ID',
+        name: 'Наименование',
+        description: 'Описание',
+        status: 'Статус',
+        creator: 'Автор',
+        executor: 'Исполнитель',
+        createdAt: 'Дата создания',
+        actions: 'Действия',
+        new: {
+          create: 'Создание задачи',
+          submit: 'Создать',
+        },
+        edit: {
+          editStatus: 'Изменение задачи',
           submit: 'Изменить',
         },
         delete: {

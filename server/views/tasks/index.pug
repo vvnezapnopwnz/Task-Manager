@@ -1,0 +1,31 @@
+extends ../layouts/application.pug
+
+
+block content
+  a(href=route('tasks#new')).btn.btn-primary.mb-5= t('views.tasks.new.create')
+
+  table.table.table-borderless.table-striped.mt-5.bg-white
+    thead
+      tr
+        th= t('views.tasks.id')
+        th= t('views.tasks.name')
+        th= t('views.tasks.status')
+        th= t('views.tasks.creator')
+        th= t('views.tasks.executor')
+        th= t('views.tasks.createdAt')
+        th= t('views.tasks.actions')
+    tbody
+      each task in tasks
+        tr
+          td= task.id
+          td= task.taskName
+          td= task.taskStatusName
+          td= `${task.creatorFirstName} ${task.creatorLastName}`
+          td= task.executorFirstName ? `${task.executorFirstName} ${task.executorLastName}` : null
+          td= formatDate(task.createdAt)
+          td
+            div.d-flex.flex-wrap
+              a(href=route('statuses#edit', { id: task.id })).btn.btn-primary.me-1= t('views.tasks.edit.submit')
+              form(action=route('statuses#destroy', { id: task.id }), method="post")
+                input(name="_method", type="hidden", value="delete")
+                input(type="submit", value= t('views.statuses.delete.submit')).btn.btn-danger
