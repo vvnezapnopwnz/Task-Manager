@@ -1,0 +1,20 @@
+extends ../layouts/application.pug
+
+block header
+  = t('views.tasks.edit.editTasks')
+
+block content
+  +formFor()(action=route(`tasks#update`, { id: task.id }) method='post').mb-3
+    +input(task, 'name', t('views.tasks.name'), errors)(type='text')
+    +textarea(task, 'description', t('views.tasks.description'), errors)
+    +select(task, 'statusId', t('views.tasks.status.name'), errors, taskStatuses)
+    +select(task, 'executorId', t('views.tasks.executor.name'), errors, users)
+ 
+    input(name="_method" type="hidden" value="PATCH")
+    +submit(task)(value=t('views.tasks.edit.submit'))
+
+//-
+    +select(task, 'statusId', t('views.tasks.status'), errors, taskStatuses)
+    +select(task, 'executorId', t('views.tasks.executor'), errors, users)
+    +input(task, 'creator.name', t('views.tasks.creator.name'), errors)(type='text')
+    +input(task, 'executor.name', t('views.tasks.executor.name'), errors)(type='text')

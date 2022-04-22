@@ -59,8 +59,15 @@ export default (app) => {
     .delete('/users/:id', { name: 'users#delete', preValidation: app.authenticate }, async (req, reply) => {
       const currentUserId = req.user.id;
       const userId = _.toNumber(req.params.id);
+      const tasks = await app.objection.models.task.query()
+        .where('creatorId', userId)
+        .orWhere('executorId', userId);
       if (currentUserId !== userId) {
         req.flash('error', i18next.t('flash.users.delete.anotherUserError'));
+        return reply.redirect(app.reverse('users'));
+      }
+      if (tasks.length !== 0) {
+        req.flash('error', i18next.t('flash.users.delete.anotherUserError')); // Не удалось удалить пользователя
         return reply.redirect(app.reverse('users'));
       }
       await app.objection.models.user.query().deleteById(currentUserId);

@@ -12,7 +12,7 @@ export default (app) => {
       '/statuses/new',
       { name: 'statuses#new', preValidation: app.authenticate },
       async (req, reply) => {
-        const taskStatus = new app.objection.models.taskStatus.query();
+        const taskStatus = new app.objection.models.taskStatus();
         reply.render('taskStatuses/new', { taskStatus });
       },
     )
@@ -26,12 +26,12 @@ export default (app) => {
       const taskStatusId = req.params.id;
       const newData = req.body.data;
       const taskStatus = await app.objection.models.taskStatus.query().findById(taskStatusId);
+      taskStatus.$set(newData);
       try {
         await taskStatus.$query().patch(newData);
         req.flash('success', i18next.t('flash.statuses.edit.success'));
         return reply.redirect(app.reverse('statuses#index'));
       } catch ({ data: errors }) {
-        taskStatus.$set(newData);
         reply.code(422).render('taskStatuses/edit', { taskStatus, errors });
         return reply;
       }
@@ -52,8 +52,13 @@ export default (app) => {
     })
     .delete('/statuses/:id', { name: 'statuses#destroy', preValidation: app.authenticate }, async (req, reply) => {
       const taskStatusId = req.params.id;
-      await app.objection.models.taskStatus.query().deleteById(taskStatusId);
-      req.flash('success', i18next.t('flash.statuses.delete.success'));
+      const tasks = await app.objection.models.task.query().where('statusId', taskStatusId).debug();
+      if (tasks.length === 0) {
+        await app.objection.models.taskStatus.query().deleteById(taskStatusId);
+        req.flash('success', i18next.t('flash.statuses.delete.success'));
+        return reply.redirect(app.reverse('statuses#index'));
+      }
+      req.flash('error', i18next.t('flash.statuses.delete.error'));
       return reply.redirect(app.reverse('statuses#index'));
     });
 };
