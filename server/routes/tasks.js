@@ -12,19 +12,23 @@ export default (app) => {
     })
     .get('/tasks/:id/edit', { name: 'tasks#edit', preValidation: app.authenticate }, async (req, reply) => {
       const task = await
-      app.objection.models.task.query().withGraphJoined('[status, creator, executor]').findById(req.params.id).debug();
+      app.objection.models.task.query().withGraphJoined('[status, creator, executor, labels]').findById(req.params.id).debug();
       // reply.send(task);
       const taskStatuses = await app.objection.models.taskStatus.query().debug();
+      const taskLabels = await app.objection.models.taskLabel.query().debug();
       const users = await app.objection.models.user.query();
-      reply.render('tasks/edit', { task, taskStatuses, users });
+      reply.render('tasks/edit', {
+        task, taskStatuses, users, taskLabels,
+      });
       return reply;
     })
     .get('/tasks/new', { name: 'tasks#new', preValidation: app.authenticate }, async (req, reply) => {
       const task = new app.objection.models.task();
       const taskStatuses = await app.objection.models.taskStatus.query().debug();
       const users = await app.objection.models.user.query();
+      const taskLabels = await app.objection.models.taskLabel.query().debug();
       reply.render('tasks/new', {
-        task, taskStatuses, users,
+        task, taskStatuses, users, taskLabels,
       });
       return reply;
     })
@@ -42,22 +46,24 @@ export default (app) => {
       };
       // eslint-disable-next-line no-unused-expressions
       executorId !== '' ? taskData.executorId = Number(executorId) : null;
-      task.$set(taskData);
-      try {
-        const validtask = await app.objection.models.task
-          .fromJson(taskData);
-        await app.objection.models.task.query().insert(validtask);
-        req.flash('success', i18next.t('flash.tasks.create.success'));
-        reply.redirect(app.reverse('tasks#index'));
-        return reply;
-      } catch ({ data }) {
-        const taskStatuses = await app.objection.models.taskStatus.query().debug();
-        const users = await app.objection.models.user.query();
-        req.flash('error', i18next.t('flash.tasks.new.error'));
-        return reply.render('tasks/new', {
-          task, taskStatuses, users, errors: data,
-        });
-      }
+      taskData.labels = req.body.data.labels;
+      reply.send(taskData);
+      // task.$set(taskData);
+      // try {
+      //   const validtask = await app.objection.models.task
+      //     .fromJson(taskData);
+      //   await app.objection.models.task.query().insert(validtask);
+      //   req.flash('success', i18next.t('flash.tasks.create.success'));
+      //   reply.redirect(app.reverse('tasks#index'));
+      //   return reply;
+      // } catch ({ data }) {
+      //   const taskStatuses = await app.objection.models.taskStatus.query().debug();
+      //   const users = await app.objection.models.user.query();
+      //   req.flash('error', i18next.t('flash.tasks.new.error'));
+      //   return reply.render('tasks/new', {
+      //     task, taskStatuses, users, errors: data,
+      //   });
+      // }
     })
     .patch('/tasks/:id/', { name: 'tasks#update', preValidation: app.authenticate }, async (req, reply) => {
       const taskId = req.params.id;

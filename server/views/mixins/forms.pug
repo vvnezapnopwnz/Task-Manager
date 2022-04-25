@@ -36,7 +36,10 @@ mixin select(entity, propertyName, placeholder, errors = {}, options)
       name= getInputName(propertyName)
       class= classLine
     )&attributes(attributes)
-      - selectedIds = [entity[propertyName]]
+      if attributes.multiple
+        - selectedIds = _.get(entity, 'labels', []).map(({ id }) => id)
+      else
+        - selectedIds = [entity[propertyName]]
         option
       each option in options
         - isSelected = selectedIds.includes(option.id)
