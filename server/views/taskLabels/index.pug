@@ -1,0 +1,24 @@
+extends ../layouts/application.pug
+
+block content
+  h1.display-4.fw-bold.mt-4= t('layouts.application.labels')
+  a(href=route('labels#new')).btn.btn-primary.mx-2= t('views.labels.new.create')
+  table.table.table-striped
+    thead
+      tr
+        th= t('views.labels.id')
+        th= t('views.labels.name')
+        th= t('views.labels.createdAt')
+        th= t('views.labels.actions')
+    tbody
+      each taskLabel in taskLabels
+        tr
+          td= taskLabel.id
+          td= taskLabel.name
+          td= formatDate(taskLabel.createdAt)
+          td
+            div.d-flex.flex-wrap
+              a(href=route('labels#edit', { id: taskLabel.id })).btn.btn-primary.me-1= t('views.labels.edit.submit')
+              form(action=route('labels#destroy', { id: taskLabel.id }), method="post")
+                input(name="_method", type="hidden", value="delete")
+                input(type="submit", value= t('views.labels.delete.submit')).btn.btn-danger
