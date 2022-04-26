@@ -1,3 +1,5 @@
+// @ts-check
+
 export const up = (knex) => (
     knex.schema.createTable('task_labels_relations', (table) => {
       table.increments('id').primary();
