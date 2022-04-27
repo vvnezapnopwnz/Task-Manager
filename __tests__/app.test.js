@@ -11,14 +11,14 @@ describe('requests', () => {
   let app;
 
   beforeAll(async () => {
-    app = fastify({ logger: { prettyPrint: true } });
+    app = fastify();
     await init(app);
   });
 
   it('GET 200', async () => {
     const res = await app.inject({
       method: 'GET',
-      url: app.reverse('root'),
+      url: app.reverse('root#index'),
     });
     expect(res.statusCode).toBe(200);
   });

@@ -14,7 +14,7 @@ describe('test users CRUD', () => {
   const testData = getTestData();
 
   beforeAll(async () => {
-    app = fastify({ logger: { prettyPrint: true } });
+    app = fastify();
     await init(app);
     knex = app.objection.knex;
     models = app.objection.models;

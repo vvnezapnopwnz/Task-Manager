@@ -6,16 +6,16 @@ import _ from 'lodash';
 export default (app) => {
   app
     .get('/tasks', { name: 'tasks#index', preValidation: app.authenticate }, async (req, reply) => {
-      const tasks = await app.objection.models.task.query().withGraphJoined('[status, creator, executor]').debug();
+      const tasks = await app.objection.models.task.query().withGraphJoined('[status, creator, executor]');
       reply.render('tasks/index', { tasks });
       return reply;
     })
     .get('/tasks/:id/edit', { name: 'tasks#edit', preValidation: app.authenticate }, async (req, reply) => {
       const task = await
-      app.objection.models.task.query().withGraphJoined('[status, creator, executor, labels]').findById(req.params.id).debug();
+      app.objection.models.task.query().withGraphJoined('[status, creator, executor, labels]').findById(req.params.id);
       // reply.send(task);
-      const taskStatuses = await app.objection.models.taskStatus.query().debug();
-      const taskLabels = await app.objection.models.taskLabel.query().debug();
+      const taskStatuses = await app.objection.models.taskStatus.query();
+      const taskLabels = await app.objection.models.taskLabel.query();
       const users = await app.objection.models.user.query();
       reply.render('tasks/edit', {
         task, taskStatuses, users, taskLabels,
@@ -24,9 +24,9 @@ export default (app) => {
     })
     .get('/tasks/new', { name: 'tasks#new', preValidation: app.authenticate }, async (req, reply) => {
       const task = new app.objection.models.task();
-      const taskStatuses = await app.objection.models.taskStatus.query().debug();
+      const taskStatuses = await app.objection.models.taskStatus.query();
       const users = await app.objection.models.user.query();
-      const taskLabels = await app.objection.models.taskLabel.query().debug();
+      const taskLabels = await app.objection.models.taskLabel.query();
       reply.render('tasks/new', {
         task, taskStatuses, users, taskLabels,
       });
@@ -62,9 +62,9 @@ export default (app) => {
           req.flash('info', i18next.t('flash.tasks.create.success'));
           return reply.redirect(app.reverse('tasks#index'));
         } catch ({ data: errors }) {
-          const taskStatuses = await app.objection.models.taskStatus.query().debug();
+          const taskStatuses = await app.objection.models.taskStatus.query();
           const users = await app.objection.models.user.query();
-          const taskLabels = await app.objection.models.taskLabel.query().debug();
+          const taskLabels = await app.objection.models.taskLabel.query();
           req.flash('error', i18next.t('flash.tasks.create.error'));
           reply.render('tasks/new', {
             task: taskData, users, taskStatuses, taskLabels, errors,
@@ -100,9 +100,9 @@ export default (app) => {
         req.flash('success', i18next.t('flash.tasks.edit.success'));
         return reply.redirect(app.reverse('tasks#index'));
       } catch ({ data: errors }) {
-        const taskStatuses = await app.objection.models.taskStatus.query().debug();
+        const taskStatuses = await app.objection.models.taskStatus.query();
         const users = await app.objection.models.user.query();
-        const taskLabels = await app.objection.models.taskLabel.query().debug();
+        const taskLabels = await app.objection.models.taskLabel.query();
         task.$set(taskData);
         req.flash('error', i18next.t('flash.tasks.edit.error'));
         reply.render('tasks/edit', {
@@ -125,7 +125,7 @@ export default (app) => {
     })
     .get('/tasks/:id', { name: 'tasks#show', preValidation: app.authenticate }, async (req, reply) => {
       const task = await
-      app.objection.models.task.query().withGraphJoined('[status, creator, executor, labels]').findById(req.params.id).debug();
+      app.objection.models.task.query().withGraphJoined('[status, creator, executor, labels]').findById(req.params.id);
       reply.render('tasks/singleTask', { task });
       return reply;
     });
