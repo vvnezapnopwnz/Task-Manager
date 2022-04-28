@@ -18,6 +18,7 @@ mixin input(entity, propertyName, label, errors = {})
       name=getInputName(propertyName)
       class=classLine
       value=_.get(entity, propertyName, '')
+      placeholder=label
     )&attributes(attributes)
     if !_.isEmpty(propertyErrors)
       .invalid-feedback= propertyErrors.map(({ message }) => message).join('. ')
@@ -72,4 +73,3 @@ mixin textarea(entity, propertyName, label, errors = {})
     )&attributes(attributes)= _.get(entity, propertyName, '')
     if !_.isEmpty(propertyErrors)
       .invalid-feedback= propertyErrors.map(({ message }) => message).join('. ')
-

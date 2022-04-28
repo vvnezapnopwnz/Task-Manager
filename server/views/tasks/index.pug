@@ -1,9 +1,40 @@
 extends ../layouts/application.pug
 
-block header 
+block header
+  h1.display-4.fw-bold.mt-4= t('layouts.application.tasks') 
   a(href=route('tasks#new')).btn.btn-primary.mb-5= t('views.tasks.new.create')
 
 block content
+  .card.shadow-sm
+    .card-body.p-4
+      +formFor()(action=route('tasks#index') method='get')
+        .row
+          col-12.col-md
+            .input-group.mb-3
+              label.input-group-text= t('views.tasks.status')
+              select(name='status').form-select
+                option(value='') #{''}
+                each status in taskStatuses
+                  option(value=status.id) #{status.name}
+          col-12.col-md
+            .input-group.mb-3
+              label.input-group-text= t('views.tasks.executor')
+              select(name='executor').form-select
+                option(value='') #{''}
+                each user in users
+                  option(value=user.id) #{user.name}
+          col-12.col-md
+            .input-group.mb-3
+              label.input-group-text= t('views.tasks.label')
+              select(name='label').form-select
+                option(value='') #{''}
+                each taskLabel in taskLabels
+                  option(value=taskLabel.id) #{taskLabel.name}
+        .mb-3.form-check
+          label.form-check-label= t('views.tasks.filterActions.chooseMine')
+          input.form-check-input(name='isCreatorUser', type='checkbox')
+        input(value=t('views.tasks.filterActions.show') type='submit').btn.btn-primary
+            
   table.table.table-borderless.table-striped.mt-5.bg-white
     thead
       tr

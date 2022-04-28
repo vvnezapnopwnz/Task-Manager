@@ -6,8 +6,48 @@ import _ from 'lodash';
 export default (app) => {
   app
     .get('/tasks', { name: 'tasks#index', preValidation: app.authenticate }, async (req, reply) => {
-      const tasks = await app.objection.models.task.query().withGraphJoined('[status, creator, executor]');
-      reply.render('tasks/index', { tasks });
+      const taskStatuses = await app.objection.models.taskStatus.query();
+      const users = await app.objection.models.user.query();
+      const taskQuery = app.objection.models.task.query();
+      const taskLabels = await app.objection.models.taskLabel.query();
+      if (Object.keys(req.query).length !== 0) {
+        const queryContent = req.query;
+        let filterQuery;
+        let executorQuery;
+        let labelsQuery;
+        let userQuery;
+        if (queryContent.status !== '') {
+          filterQuery = taskQuery.where('status_id', '=', queryContent.status);
+        } else {
+          filterQuery = taskQuery;
+        }
+        if (queryContent.executor !== '') {
+          executorQuery = filterQuery.where('executor_id', '=', queryContent.executor);
+        } else {
+          executorQuery = filterQuery;
+        }
+        const tasksFound = executorQuery.withGraphJoined('[status, creator, executor, labels]');
+        if (queryContent.label !== '') {
+          labelsQuery = tasksFound.select('*').join('task_labels_relations', function labelSearch() {
+            this.on('labels.id', '=', 'task_labels_relations.label_id');
+          }).where('labels.id', '=', queryContent.label);
+        } else {
+          labelsQuery = tasksFound;
+        }
+        if (queryContent.isCreatorUser === 'on') {
+          userQuery = await labelsQuery.where('creator_id', '=', req.user.id);
+        } else {
+          userQuery = await labelsQuery;
+        }
+        reply.render('tasks/index', {
+          tasks: userQuery, taskStatuses, users, taskLabels,
+        });
+        return reply;
+      }
+      const tasks = await app.objection.models.task.query().withGraphJoined('[status, creator, executor, labels]');
+      reply.render('tasks/index', {
+        tasks, taskStatuses, users, taskLabels,
+      });
       return reply;
     })
     .get('/tasks/:id/edit', { name: 'tasks#edit', preValidation: app.authenticate }, async (req, reply) => {

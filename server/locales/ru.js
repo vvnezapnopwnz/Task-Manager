@@ -148,6 +148,7 @@ export default {
         executor: 'Исполнитель',
         createdAt: 'Дата создания',
         actions: 'Действия',
+        label: 'Метка',
         new: {
           create: 'Создание задачи',
           submit: 'Создать',
@@ -158,6 +159,10 @@ export default {
         },
         delete: {
           submit: 'Удалить',
+        },
+        filterActions: {
+          show: 'Показать',
+          chooseMine: 'Только мои задачи',
         },
       },
       labels: {
