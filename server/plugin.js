@@ -5,6 +5,7 @@ import path from 'path';
 import fastifyStatic from 'fastify-static';
 import fastifyErrorPage from 'fastify-error-page';
 
+import Rollbar from 'rollbar';
 import pointOfView from 'point-of-view';
 import fastifyFormbody from 'fastify-formbody';
 import fastifySecureSession from 'fastify-secure-session';
@@ -112,6 +113,21 @@ const registerPlugins = (app) => {
     models,
   });
 };
+
+const rollbar = new Rollbar({
+  accessToken: process.env.ROLLBAR,
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+});
+
+rollbar.log('Rollbar started!');
+
+const errorHandler = (app) => {
+  app.setErrorHandler((error, request, reply) => {
+    rollbar.error(`Error: ${error}`, request, reply);
+  });
+};
+
 // eslint-disable-next-line no-unused-vars
 export default async (app, options) => {
   registerPlugins(app);
@@ -121,6 +137,6 @@ export default async (app, options) => {
   setUpStaticAssets(app);
   addRoutes(app);
   addHooks(app);
-
+  errorHandler(app);
   return app;
 };

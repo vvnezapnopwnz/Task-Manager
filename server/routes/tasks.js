@@ -8,8 +8,8 @@ export default (app) => {
     .get('/tasks', { name: 'tasks#index', preValidation: app.authenticate }, async (req, reply) => {
       const taskStatuses = await app.objection.models.taskStatus.query();
       const users = await app.objection.models.user.query();
-      const taskQuery = app.objection.models.task.query();
       const taskLabels = await app.objection.models.taskLabel.query();
+      const taskQuery = app.objection.models.task.query();
       if (Object.keys(req.query).length !== 0) {
         const queryContent = req.query;
         let filterQuery;
