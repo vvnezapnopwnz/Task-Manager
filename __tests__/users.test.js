@@ -33,7 +33,7 @@ describe('test users CRUD', () => {
   it('index', async () => {
     const response = await app.inject({
       method: 'GET',
-      url: app.reverse('users'),
+      url: app.reverse('users#index'),
     });
 
     expect(response.statusCode).toBe(200);
@@ -42,7 +42,7 @@ describe('test users CRUD', () => {
   it('new', async () => {
     const response = await app.inject({
       method: 'GET',
-      url: app.reverse('newUser'),
+      url: app.reverse('users#new'),
     });
 
     expect(response.statusCode).toBe(200);
@@ -52,7 +52,7 @@ describe('test users CRUD', () => {
     const params = testData.users.new;
     const response = await app.inject({
       method: 'POST',
-      url: app.reverse('users'),
+      url: app.reverse('users#create'),
       payload: {
         data: params,
       },

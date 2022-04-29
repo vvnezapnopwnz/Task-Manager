@@ -4,11 +4,11 @@ import i18next from 'i18next';
 
 export default (app) => {
   app
-    .get('/session/new', { name: 'newSession' }, (req, reply) => {
+    .get('/session/new', { name: 'session#index' }, (req, reply) => {
       const signInForm = {};
       reply.render('session/new', { signInForm });
     })
-    .post('/session', { name: 'session' }, app.fp.authenticate('form', async (req, reply, err, user) => {
+    .post('/session', { name: 'session#create' }, app.fp.authenticate('form', async (req, reply, err, user) => {
       if (err) {
         return app.httpErrors.internalServerError(err);
       }
@@ -23,7 +23,7 @@ export default (app) => {
       req.flash('success', i18next.t('flash.session.create.success'));
       return reply.redirect(app.reverse('root#index'));
     }))
-    .delete('/session', (req, reply) => {
+    .delete('/session', { name: 'session#destroy' }, (req, reply) => {
       req.logOut();
       req.flash('info', i18next.t('flash.session.delete.success'));
       reply.redirect(app.reverse('root#index'));

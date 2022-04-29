@@ -21,14 +21,14 @@ describe('test session', () => {
   it('test sign in / sign out', async () => {
     const response = await app.inject({
       method: 'GET',
-      url: app.reverse('newSession'),
+      url: app.reverse('session#index'),
     });
 
     expect(response.statusCode).toBe(200);
 
     const responseSignIn = await app.inject({
       method: 'POST',
-      url: app.reverse('session'),
+      url: app.reverse('session#create'),
       payload: {
         data: testData.users.existing,
       },
@@ -44,7 +44,7 @@ describe('test session', () => {
 
     const responseSignOut = await app.inject({
       method: 'DELETE',
-      url: app.reverse('session'),
+      url: app.reverse('session#destroy'),
       // используем полученные ранее куки
       cookies: cookie,
     });

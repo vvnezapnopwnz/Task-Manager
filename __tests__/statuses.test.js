@@ -22,7 +22,7 @@ describe('test statuses CRUD', () => {
     await prepareData(app);
     const responseSignIn = await app.inject({
       method: 'POST',
-      url: app.reverse('session'),
+      url: app.reverse('session#create'),
       payload: {
         data: testData.users.existing,
       },

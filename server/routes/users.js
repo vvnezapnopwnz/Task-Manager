@@ -5,16 +5,16 @@ import _ from 'lodash';
 
 export default (app) => {
   app
-    .get('/users', { name: 'users' }, async (req, reply) => {
+    .get('/users', { name: 'users#index' }, async (req, reply) => {
       const users = await app.objection.models.user.query();
       reply.render('users/index', { users });
       return reply;
     })
-    .get('/users/new', { name: 'newUser' }, (req, reply) => {
+    .get('/users/new', { name: 'users#new' }, (req, reply) => {
       const user = new app.objection.models.user();
       reply.render('users/new', { user });
     })
-    .post('/users', async (req, reply) => {
+    .post('/users', { name: 'users#create' }, async (req, reply) => {
       const user = new app.objection.models.user();
       user.$set(req.body.data);
 
@@ -35,20 +35,20 @@ export default (app) => {
       const userId = _.toNumber(req.params.id);
       if (currentUserId !== userId) {
         req.flash('error', i18next.t('flash.users.edit.anotherUserError'));
-        return reply.redirect(app.reverse('users'));
+        return reply.redirect(app.reverse('users#index'));
       }
       const user = await app.objection.models.user.query().findById(currentUserId);
       reply.code(200).render('users/edit', { user });
       return reply;
     })
-    .patch('/users/edit', { name: 'users/edit#patch', preValidation: app.authenticate }, async (req, reply) => {
+    .patch('/users/edit', { name: 'users#patch', preValidation: app.authenticate }, async (req, reply) => {
       const userId = req.user.id;
       const newData = req.body.data;
       const user = await app.objection.models.user.query().findById(userId);
       try {
         await user.$query().patch(newData);
         req.flash('success', i18next.t('flash.users.edit.success'));
-        return reply.redirect(app.reverse('users'));
+        return reply.redirect(app.reverse('users#index'));
       } catch ({ data: errors }) {
         user.$set(newData);
         reply.code(422).render('users/edit', { user, errors });
@@ -63,15 +63,15 @@ export default (app) => {
         .orWhere('executorId', userId);
       if (currentUserId !== userId) {
         req.flash('error', i18next.t('flash.users.delete.anotherUserError'));
-        return reply.redirect(app.reverse('users'));
+        return reply.redirect(app.reverse('users#index'));
       }
       if (tasks.length !== 0) {
         req.flash('error', i18next.t('flash.users.delete.anotherUserError')); // Не удалось удалить пользователя
-        return reply.redirect(app.reverse('users'));
+        return reply.redirect(app.reverse('users#index'));
       }
       await app.objection.models.user.query().deleteById(currentUserId);
       await req.logOut();
       req.flash('success', i18next.t('flash.users.delete.success'));
-      return reply.redirect(app.reverse('users'));
+      return reply.redirect(app.reverse('users#index'));
     });
 };
