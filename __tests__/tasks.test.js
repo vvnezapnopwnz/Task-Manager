@@ -44,7 +44,6 @@ describe('test tasks CRUD', () => {
 
   it('single Task', async () => {
     const taskName = testData.tasks.existing.name;
-    console.log(taskName);
     const task = await models.task.query()
       .findOne({ name: taskName });
     const response = await app.inject({
@@ -54,6 +53,83 @@ describe('test tasks CRUD', () => {
     });
 
     expect(response.statusCode).toBe(200);
+  });
+
+  it('new task page', async () => {
+    const response = await app.inject({
+      method: 'GET',
+      url: app.reverse('tasks#new'),
+      cookies: cookie,
+    });
+
+    expect(response.statusCode).toBe(200);
+  });
+
+  it('create new task', async () => {
+    const response = await app.inject({
+      method: 'POST',
+      url: app.reverse('tasks#create'),
+      payload: {
+        data: testData.tasks.new,
+      },
+      cookies: cookie,
+    });
+    expect(response.statusCode).toBe(302);
+    await expect(models.task.query().findOne({ name: testData.tasks.new.name }))
+      .resolves
+      .toMatchObject(testData.tasks.new);
+  });
+
+  it('edit existed task', async () => {
+    const task = await models.task
+      .query()
+      .findOne({ name: testData.tasks.existing.name });
+
+    const response = await app.inject({
+      method: 'GET',
+      url: app.reverse('tasks#edit', { id: task.id }),
+      cookies: cookie,
+    });
+    expect(response.statusCode).toBe(200);
+  });
+
+  it('update', async () => {
+    const task = await models.task
+      .query()
+      .findOne({ name: testData.tasks.existing.name });
+
+    const response = await app.inject({
+      method: 'PATCH',
+      url: app.reverse('tasks#update', { id: task.id }),
+      payload: {
+        data: testData.tasks.new,
+      },
+      cookies: cookie,
+    });
+
+    expect(response.statusCode).toBe(302);
+    const updatedTask = await models.task
+      .query()
+      .findById(task.id);
+    expect(updatedTask).toMatchObject(testData.tasks.new);
+  });
+
+  it('delete', async () => {
+    const task = await models.task
+      .query()
+      .findOne({ name: testData.tasks.existing.name });
+
+    const response = await app.inject({
+      method: 'DELETE',
+      url: app.reverse('tasks#destroy', { id: task.id }),
+      cookies: cookie,
+    });
+
+    expect(response.statusCode).toBe(302);
+    const deletedTask = await models.task
+      .query()
+      .findOne({ name: testData.tasks.new.name });
+    expect(deletedTask).toBeUndefined();
   });
 
   afterEach(async () => {

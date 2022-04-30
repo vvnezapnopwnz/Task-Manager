@@ -102,7 +102,7 @@ const registerPlugins = (app) => {
     'form',
     {
       failureRedirect: app.reverse('root#index'),
-      failureFlash: i18next.t('flash.authError'),
+      failureFlash: i18next.t('flash.session.authError'),
     },
   // @ts-ignore
   )(...args));

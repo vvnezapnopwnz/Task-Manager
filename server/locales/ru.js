@@ -12,6 +12,7 @@ export default {
         delete: {
           success: 'Вы разлогинены',
         },
+        authError: 'Доступ запрещён! Пожалуйста, авторизируйтесь.',
       },
       users: {
         create: {
@@ -27,7 +28,6 @@ export default {
           success: 'Пользователь успешно изменён',
         },
       },
-      authError: 'Доступ запрещён! Пожалуйста, авторизируйтесь.',
       statuses: {
         create: {
           error: 'Не удалось создать статус',
@@ -50,6 +50,7 @@ export default {
         delete: {
           success: 'Задача успешно удалена',
           error: 'Не удалось удалить задачу',
+          accessError: 'Задачу может удалить только её автор',
         },
         edit: {
           success: 'Задача успешно изменёна',
@@ -130,6 +131,7 @@ export default {
         new: {
           create: 'Создание статуса',
           submit: 'Создать',
+          createButton: 'Создать статус',
         },
         edit: {
           editStatus: 'Изменение статуса',
@@ -152,6 +154,7 @@ export default {
         new: {
           create: 'Создание задачи',
           submit: 'Создать',
+          createButton: 'Создать задачу',
         },
         edit: {
           editStatus: 'Изменение задачи',
@@ -173,6 +176,7 @@ export default {
         new: {
           create: 'Создание метки',
           submit: 'Создать',
+          createButton: 'Создать метку',
         },
         edit: {
           editStatus: 'Изменение метки',

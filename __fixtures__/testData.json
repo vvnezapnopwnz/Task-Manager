@@ -23,12 +23,30 @@
     }
   },  
   "tasks": {
+    "new": {
+      "name": "test task 2",
+      "description": "test task desc 2",
+      "statusId": 1,
+      "creatorId": 2,
+      "executorId": 3
+    },
     "existing": {
-      "name": "Task test",
-      "description": "Run task test",
+      "name": "test task 1",
+      "description": "test task desc 1",
       "status_id": 1,
       "creator_id": 1,
       "executor_id": 1
+    }
+  },
+    "labels": {
+    "new": {
+      "name": "new label"
+    },
+    "existing": {
+      "name": "existing label"
+    },
+    "editing": {
+      "name": "label for editing test"
     }
   }
 }

@@ -2,7 +2,7 @@ extends ../layouts/application.pug
 
 block header
   h1.display-4.fw-bold.mt-4= t('layouts.application.tasks') 
-  a(href=route('tasks#new')).btn.btn-primary.mb-5= t('views.tasks.new.create')
+  a(href=route('tasks#new')).btn.btn-primary.mb-5= t('views.tasks.new.createButton')
 
 block content
   .card.shadow-sm
@@ -50,7 +50,7 @@ block content
         tr
           td=task.id
           td
-            a(href=route(`tasks#show`, { id: task.id } )).btn.btn-primary.me-1= task.name
+            a(href=route(`tasks#show`, { id: task.id } ))= task.name
           td= task.status.name
           td= task.creator.name
           td= task.executor ? task.executor.name : null

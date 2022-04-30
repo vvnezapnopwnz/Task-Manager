@@ -19,4 +19,5 @@ export const prepareData = async (app) => {
   await knex('users').insert(getFixtureData('users.json'));
   await knex('task_statuses').insert(getFixtureData('task_statuses.json'));
   await knex('tasks').insert(getFixtureData('tasks.json'));
+  await knex('task_labels').insert(getFixtureData('task_labels.json'));
 };
