@@ -11,22 +11,22 @@ block content
         .row
           col-12.col-md
             .input-group.mb-3
-              label.input-group-text= t('views.tasks.status')
-              select(name='status').form-select
+              label(for='data_status').input-group-text= t('views.tasks.status')
+              select(name='status', id='data_status').form-select
                 option(value='') #{''}
                 each status in taskStatuses
                   option(value=status.id) #{status.name}
           col-12.col-md
             .input-group.mb-3
-              label.input-group-text= t('views.tasks.executor')
-              select(name='executor').form-select
+              label(for='data_executor').input-group-text= t('views.tasks.executor')
+              select(name='executor', id='data_executor').form-select
                 option(value='') #{''}
                 each user in users
                   option(value=user.id) #{user.name}
           col-12.col-md
             .input-group.mb-3
-              label.input-group-text= t('views.tasks.label')
-              select(name='label').form-select
+              label(for='data_label').input-group-text= t('views.tasks.label')
+              select(name='label', id='data_label').form-select
                 option(value='') #{''}
                 each taskLabel in taskLabels
                   option(value=taskLabel.id) #{taskLabel.name}
