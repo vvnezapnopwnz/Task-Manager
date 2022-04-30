@@ -31,8 +31,9 @@ block content
                 each taskLabel in taskLabels
                   option(value=taskLabel.id) #{taskLabel.name}
         .mb-3.form-check
-          label.form-check-label= t('views.tasks.filterActions.chooseMine')
-          input.form-check-input(name='isCreatorUser', type='checkbox')
+          - var thisUserFilter = 'isCreatorUser';
+          input.form-check-input(name=thisUserFilter, id=`data_${thisUserFilter}`, type='checkbox')
+          label(for=`data_${thisUserFilter}`).form-check-label= t('views.tasks.filterActions.chooseMine')
         input(value=t('views.tasks.filterActions.show') type='submit').btn.btn-primary
             
   table.table.table-borderless.table-striped.mt-5.bg-white
