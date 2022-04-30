@@ -6,7 +6,7 @@ block header
 block content
   +formFor()(action=route('users#create') method='post')
     +input(user,'firstName', t('views.users.new.registerFields.firstName'), errors)(type='text', placeholder= t('views.users.new.registerFields.firstName'))
-    +input(user, 'lastName', t('views.users.new.registerFields.firstName'), errors)(type='text', placeholder= t('views.users.new.registerFields.lastName'))
-    +input(user, 'email', t('views.users.new.registerFields.firstName'), errors)(type="text", , placeholder= t('views.users.new.registerFields.email'))
-    +input(user, 'password', t('views.users.new.registerFields.firstName'), errors)(type="password", , placeholder= t('views.users.new.registerFields.password'))
+    +input(user, 'lastName', t('views.users.new.registerFields.lastName'), errors)(type='text', placeholder= t('views.users.new.registerFields.lastName'))
+    +input(user, 'email', t('views.users.new.registerFields.email'), errors)(type="text", , placeholder= t('views.users.new.registerFields.email'))
+    +input(user, 'password', t('views.users.new.registerFields.password'), errors)(type="password", , placeholder= t('views.users.new.registerFields.password'))
     +submit(user)(value=t('views.users.new.submit'))
