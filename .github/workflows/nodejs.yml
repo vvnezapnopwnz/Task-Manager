@@ -20,6 +20,8 @@ jobs:
         with:
           node-version: '17.x'
           cache: 'npm'
+          env:
+            SESSION_KEY: ${{ secrets.SESSION_KEY }}
       - run: make setup
       - run: make lint
       - run: make test
