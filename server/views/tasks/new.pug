@@ -1,7 +1,7 @@
 extends ../layouts/application.pug
 
 block header
-  = t('layouts.application.createTask')
+  = t('views.tasks.new.create')
 
 block content
   +formFor()(action=route('tasks#create') method='post').mb-3

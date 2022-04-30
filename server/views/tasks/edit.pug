@@ -13,9 +13,3 @@ block content
 
     input(name="_method" type="hidden" value="PATCH")
     +submit(task)(value=t('views.tasks.edit.submit'))
-
-//-
-    +select(task, 'statusId', t('views.tasks.status'), errors, taskStatuses)
-    +select(task, 'executorId', t('views.tasks.executor'), errors, users)
-    +input(task, 'creator.name', t('views.tasks.creator.name'), errors)(type='text')
-    +input(task, 'executor.name', t('views.tasks.executor.name'), errors)(type='text')

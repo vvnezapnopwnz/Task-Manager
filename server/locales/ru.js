@@ -151,13 +151,14 @@ export default {
         createdAt: 'Дата создания',
         actions: 'Действия',
         label: 'Метка',
+        labels: 'Метки',
         new: {
           create: 'Создание задачи',
           submit: 'Создать',
           createButton: 'Создать задачу',
         },
         edit: {
-          editStatus: 'Изменение задачи',
+          editTasks: 'Изменение задачи',
           submit: 'Изменить',
         },
         delete: {
