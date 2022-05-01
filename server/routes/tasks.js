@@ -75,11 +75,22 @@ export default (app) => {
         };
         // eslint-disable-next-line no-unused-expressions
         executorId !== '' ? taskData.executorId = Number(executorId) : null;
-        const labelsIds = _.toArray(_.get(req.body.data, 'labels', []));
-        const thisTaskLabels = await app.objection.models.taskLabel
-          .query()
-          .findByIds(labelsIds);
-        taskData.labels = thisTaskLabels;
+        if (Array.isArray(req.body.data.labels)) {
+          const labelsIds = _.toArray(_.get(req.body.data, 'labels', []));
+          const thisTaskLabels = await app.objection.models.taskLabel
+            .query()
+            .findByIds(labelsIds);
+          taskData.labels = thisTaskLabels;
+        } else if (!Array.isArray(req.body.data.labels) && req.body.data.labels !== undefined) {
+          const singleLabel = await app.objection.models.taskLabel
+            .query().findById(Number(req.body.data.labels));
+          taskData.labels = [singleLabel];
+        } else {
+          taskData.labels = [];
+        }
+
+        console.log(req.body.data.labels);
+        console.log(taskData);
         try {
           await app.objection.models.task.transaction(async (trx) => {
             await app.objection.models.task
@@ -116,13 +127,24 @@ export default (app) => {
       };
       // eslint-disable-next-line no-unused-expressions
       executorId !== '' ? taskData.executorId = Number(executorId) : null;
-      const labelsIds = _.toArray(_.get(req.body.data, 'labels', []));
-      const thisTaskLabels = await app.objection.models.taskLabel.query().findByIds(labelsIds);
+      if (Array.isArray(req.body.data.labels)) {
+        const labelsIds = _.toArray(_.get(req.body.data, 'labels', []));
+        const thisTaskLabels = await app.objection.models.taskLabel
+          .query()
+          .findByIds(labelsIds);
+        taskData.labels = thisTaskLabels;
+      } else if (!Array.isArray(req.body.data.labels) && req.body.data.labels !== undefined) {
+        const singleLabel = await app.objection.models.taskLabel
+          .query().findById(Number(req.body.data.labels));
+        taskData.labels = [singleLabel];
+      } else {
+        taskData.labels = [];
+      }
       try {
         await app.objection.models.task.transaction(async (trx) => {
           await task.$relatedQuery('labels', trx).unrelate();
           await task.$query(trx).patch(taskData);
-          await Promise.all(thisTaskLabels.map((label) => task.$relatedQuery('labels', trx).relate(label)));
+          await Promise.all(taskData.labels.map((label) => task.$relatedQuery('labels', trx).relate(label)));
         });
         req.flash('success', i18next.t('flash.tasks.edit.success'));
         return reply.redirect(app.reverse('tasks#index'));
