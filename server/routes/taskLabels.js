@@ -59,6 +59,7 @@ export default (app) => {
       const taskLabelId = req.params.id;
       const tasks = await app.objection.models.task.query().withGraphJoined('[labels]').where('labelId', taskLabelId);
       if (tasks.length === 0) {
+        await app.objection.models.task.relatedQuery('labels').unrelate().where('label_id', '=', taskLabelId);
         await app.objection.models.taskLabel.query().deleteById(taskLabelId);
         req.flash('success', i18next.t('flash.labels.delete.success'));
         return reply.redirect(app.reverse('labels#index'));

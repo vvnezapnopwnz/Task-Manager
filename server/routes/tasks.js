@@ -139,14 +139,20 @@ export default (app) => {
       }
     })
     .delete('/tasks/:id', { name: 'tasks#destroy', preValidation: app.authenticate }, async (req, reply) => {
-      const currentUserId = req.user.id;
-      const taskId = req.params.id;
+      const { id: taskId } = req.params;
+
       const task = await app.objection.models.task.query().findById(taskId);
-      if (currentUserId !== task.creatorId) {
+
+      if (req.user.id !== task.creatorId) {
         req.flash('error', i18next.t('flash.tasks.delete.accessError'));
         return reply.redirect(app.reverse('tasks#index'));
       }
-      await app.objection.models.task.query().deleteById(taskId);
+
+      await app.objection.models.task.transaction(async (trx) => {
+        await task.$relatedQuery('labels', trx).unrelate();
+        await task.$query(trx).delete();
+      });
+
       req.flash('success', i18next.t('flash.tasks.delete.success'));
       return reply.redirect(app.reverse('tasks#index'));
     })
