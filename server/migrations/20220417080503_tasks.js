@@ -8,10 +8,11 @@ export const up = (knex) => (
     table.integer('status_id').index().references('id').inTable('task_statuses');
     table.integer('creator_id').index().references('id').inTable('users');
     table.integer('executor_id').index().unsigned().nullable()
-      .references('id').inTable('users');
+      .references('id')
+      .inTable('users');
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at').defaultTo(knex.fn.now());
-    })
-  );
+  })
+);
 
 export const down = (knex) => knex.schema.dropTable('tasks');
