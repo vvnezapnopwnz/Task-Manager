@@ -33,7 +33,7 @@ export default (app) => {
           }
         });
       reply.render('tasks/index', {
-        tasks, taskStatuses, users, taskLabels,
+        tasks, taskStatuses, users, taskLabels, selectedItems: req.query,
       });
       return reply;
     })

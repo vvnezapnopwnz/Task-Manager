@@ -15,21 +15,24 @@ block content
               select(name='status', id='data_status').form-select
                 option(value='') #{''}
                 each status in taskStatuses
-                  option(value=status.id) #{status.name}
+                  - isSelected = status.id===Number(selectedItems.status)
+                  option(value=status.id, selected= isSelected) #{status.name}
           col-12.col-md
             .input-group.mb-3
               label(for='data_executor').input-group-text= t('views.tasks.executor')
               select(name='executor', id='data_executor').form-select
                 option(value='') #{''}
                 each user in users
-                  option(value=user.id) #{user.name}
+                  - isSelected = user.id===Number(selectedItems.executor)
+                  option(value=user.id, selected= isSelected) #{user.name}
           col-12.col-md
             .input-group.mb-3
               label(for='data_label').input-group-text= t('views.tasks.label')
               select(name='label', id='data_label').form-select
                 option(value='') #{''}
                 each taskLabel in taskLabels
-                  option(value=taskLabel.id) #{taskLabel.name}
+                  - isSelected = taskLabel.id===Number(selectedItems.label)
+                  option(value=taskLabel.id, selected= isSelected) #{taskLabel.name}
         .mb-3.form-check
           - var thisUserFilter = 'isCreatorUser';
           input.form-check-input(name=thisUserFilter, id=`data_${thisUserFilter}`, type='checkbox')
