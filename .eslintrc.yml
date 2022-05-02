@@ -2,17 +2,21 @@
 
 root: true
 
+plugins:
+  - jest
+
 parserOptions:
   ecmaVersion: latest
 
-extends:
-  - 'airbnb-base'
-  - 'plugin:jest/recommended'
-
 env:
-  browser: true
   node: true
   jest: true
+  browser: true
+
+extends:
+  - "airbnb-base"
+  - "plugin:jest/recommended"
+  - "plugin:playwright/playwright-test"
 
 rules:
   no-console: 0
