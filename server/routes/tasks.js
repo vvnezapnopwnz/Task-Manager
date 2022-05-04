@@ -89,8 +89,6 @@ export default (app) => {
           taskData.labels = [];
         }
 
-        console.log(req.body.data.labels);
-        console.log(taskData);
         try {
           await app.objection.models.task.transaction(async (trx) => {
             await app.objection.models.task
