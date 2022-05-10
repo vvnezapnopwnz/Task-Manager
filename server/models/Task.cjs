@@ -65,4 +65,29 @@ module.exports = class Task extends unique(BaseModel) {
       },
     };
   }
+
+  static get modifiers() {
+    return {
+      filterExecutor(query, executorId) {
+        if (executorId) {
+          query.where({ executorId });
+        }
+      },
+      filterStatus(query, statusId) {
+        if (statusId) {
+          query.where({ statusId });
+        }
+      },
+      filterLabel(query, labelId) {
+        if (labelId) {
+          query.where({ labelId });
+        }
+      },
+      filterByOwner(query, creatorId) {
+        if (creatorId) {
+          query.where({ creatorId });
+        }
+      },
+    };
+  }
 };

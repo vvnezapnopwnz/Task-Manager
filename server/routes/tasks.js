@@ -11,27 +11,11 @@ export default (app) => {
       const taskLabels = await app.objection.models.taskLabel.query();
 
       const tasks = await app.objection.models.task.query()
-        .modify((builder) => {
-          if (req.query.status) {
-            builder.where('status_id', '=', Number(req.query.status));
-          }
-        })
-        .modify((builder) => {
-          if (req.query.executor) {
-            builder.where('executor_id', '=', Number(req.query.executor));
-          }
-        })
-        .modify((builder) => {
-          if (req.query.creatorUser) {
-            builder.where('creator_id', '=', Number(req.user.id));
-          }
-        })
-        .withGraphJoined('[status, creator, executor, labels]')
-        .modify((builder) => {
-          if (req.query.label) {
-            builder.where('label_id', '=', Number(req.query.label));
-          }
-        });
+        .modify('filterExecutor', req.query.executor)
+        .modify('filterStatus', req.query.status)
+        .modify('filterLabel', req.query.label)
+        .modify('filterByOwner', req.query.creatorUser ? req.user.id : null)
+        .withGraphJoined('[status, creator, executor, labels]');
       reply.render('tasks/index', {
         tasks, taskStatuses, users, taskLabels, selectedItems: req.query,
       });
@@ -73,22 +57,15 @@ export default (app) => {
           creatorId,
           statusId: Number(statusId),
         };
-        // eslint-disable-next-line no-unused-expressions
-        executorId !== '' ? taskData.executorId = Number(executorId) : null;
-        if (Array.isArray(req.body.data.labels)) {
-          const labelsIds = _.toArray(_.get(req.body.data, 'labels', []));
-          const thisTaskLabels = await app.objection.models.taskLabel
-            .query()
-            .findByIds(labelsIds);
-          taskData.labels = thisTaskLabels;
-        } else if (!Array.isArray(req.body.data.labels) && req.body.data.labels !== undefined) {
-          const singleLabel = await app.objection.models.taskLabel
-            .query().findById(Number(req.body.data.labels));
-          taskData.labels = [singleLabel];
-        } else {
-          taskData.labels = [];
+        if (executorId !== '') {
+          taskData.executorId = Number(executorId);
         }
-
+        const labelsIds = _.get(req.body.data, 'labels', []);
+        console.log(labelsIds);
+        const thisTaskLabels = await app.objection.models.taskLabel
+          .query()
+          .findByIds(labelsIds);
+        taskData.labels = thisTaskLabels;
         try {
           await app.objection.models.task.transaction(async (trx) => {
             await app.objection.models.task
@@ -123,21 +100,15 @@ export default (app) => {
         creatorId,
         statusId: Number(statusId),
       };
-      // eslint-disable-next-line no-unused-expressions
-      executorId !== '' ? taskData.executorId = Number(executorId) : null;
-      if (Array.isArray(req.body.data.labels)) {
-        const labelsIds = _.toArray(_.get(req.body.data, 'labels', []));
-        const thisTaskLabels = await app.objection.models.taskLabel
-          .query()
-          .findByIds(labelsIds);
-        taskData.labels = thisTaskLabels;
-      } else if (!Array.isArray(req.body.data.labels) && req.body.data.labels !== undefined) {
-        const singleLabel = await app.objection.models.taskLabel
-          .query().findById(Number(req.body.data.labels));
-        taskData.labels = [singleLabel];
-      } else {
-        taskData.labels = [];
+      if (executorId !== '') {
+        taskData.executorId = Number(executorId);
       }
+      const labelsIds = _.get(req.body.data, 'labels', []);
+      console.log(labelsIds);
+      const thisTaskLabels = await app.objection.models.taskLabel
+        .query()
+        .findByIds(labelsIds);
+      taskData.labels = thisTaskLabels;
       try {
         await app.objection.models.task.transaction(async (trx) => {
           await task.$relatedQuery('labels', trx).unrelate();
