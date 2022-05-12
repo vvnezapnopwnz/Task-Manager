@@ -27,12 +27,12 @@ export default (app) => {
       const taskStatusId = req.params.id;
       const newData = req.body.data;
       const taskStatus = await app.objection.models.taskStatus.query().findById(taskStatusId);
-      taskStatus.$set(newData);
       try {
         await taskStatus.$query().patch(newData);
         req.flash('success', i18next.t('flash.statuses.edit.success'));
         return reply.redirect(app.reverse('statuses#index'));
       } catch ({ data: errors }) {
+        taskStatus.$set(newData);
         req.flash('error', i18next.t('flash.statuses.edit.error'));
         reply.code(422).render('taskStatuses/edit', { taskStatus, errors });
         return reply;
@@ -40,16 +40,16 @@ export default (app) => {
     })
     .post('/statuses', { name: 'statuses#create', preValidation: app.authenticate }, async (req, reply) => {
       const taskStatus = new app.objection.models.taskStatus();
-      taskStatus.$set(req.body.data);
       try {
         const validStatus = await app.objection.models.taskStatus
           .fromJson(req.body.data);
         await app.objection.models.taskStatus.query().insert(validStatus);
         req.flash('success', i18next.t('flash.statuses.create.success'));
         reply.redirect(app.reverse('statuses#index'));
-      } catch ({ data }) {
+      } catch ({ data: errors }) {
+        taskStatus.$set(req.body.data);
         req.flash('error', i18next.t('flash.statuses.create.error'));
-        reply.render('taskStatuses/new', { taskStatus, errors: data });
+        reply.render('taskStatuses/new', { taskStatus, errors });
       }
     })
     .delete('/statuses/:id', { name: 'statuses#destroy', preValidation: app.authenticate }, async (req, reply) => {

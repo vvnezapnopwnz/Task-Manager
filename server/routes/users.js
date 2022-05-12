@@ -66,7 +66,7 @@ export default (app) => {
         return reply.redirect(app.reverse('users#index'));
       }
       if (tasks.length !== 0) {
-        req.flash('error', i18next.t('flash.users.delete.anotherUserError')); // Не удалось удалить пользователя
+        req.flash('error', i18next.t('flash.users.delete.anotherUserError'));
         return reply.redirect(app.reverse('users#index'));
       }
       await app.objection.models.user.query().deleteById(currentUserId);

@@ -25,9 +25,7 @@ export default (app) => {
         });
         req.flash('success', i18next.t('flash.labels.create.success'));
         reply.redirect(app.reverse('labels#index'));
-        // Here the transaction has been committed.
       } catch ({ data }) {
-        // Here the transaction has been rolled back.
         const taskLabel = new app.objection.models.taskLabel();
         req.flash('error', i18next.t('flash.labels.create.error'));
         reply.render('taskLabels/new', { taskLabel, errors: data });
@@ -44,7 +42,6 @@ export default (app) => {
       const newData = req.body.data;
       try {
         const taskLabel = await app.objection.models.taskLabel.query().findById(taskLabelId);
-        taskLabel.$set(newData);
         await taskLabel.$query().patch(newData);
         req.flash('success', i18next.t('flash.labels.edit.success'));
         return reply.redirect(app.reverse('labels#index'));

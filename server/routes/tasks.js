@@ -9,7 +9,6 @@ export default (app) => {
       const taskStatuses = await app.objection.models.taskStatus.query();
       const users = await app.objection.models.user.query();
       const taskLabels = await app.objection.models.taskLabel.query();
-
       const tasks = await app.objection.models.task.query()
         .modify('filterExecutor', req.query.executor)
         .modify('filterStatus', req.query.status)
@@ -61,7 +60,6 @@ export default (app) => {
           taskData.executorId = Number(executorId);
         }
         const labelsIds = _.get(req.body.data, 'labels', []);
-        console.log(labelsIds);
         const thisTaskLabels = await app.objection.models.taskLabel
           .query()
           .findByIds(labelsIds);
@@ -104,7 +102,6 @@ export default (app) => {
         taskData.executorId = Number(executorId);
       }
       const labelsIds = _.get(req.body.data, 'labels', []);
-      console.log(labelsIds);
       const thisTaskLabels = await app.objection.models.taskLabel
         .query()
         .findByIds(labelsIds);
@@ -131,14 +128,11 @@ export default (app) => {
     })
     .delete('/tasks/:id', { name: 'tasks#destroy', preValidation: app.authenticate }, async (req, reply) => {
       const { id: taskId } = req.params;
-
       const task = await app.objection.models.task.query().findById(taskId);
-
       if (req.user.id !== task.creatorId) {
         req.flash('error', i18next.t('flash.tasks.delete.accessError'));
         return reply.redirect(app.reverse('tasks#index'));
       }
-
       await app.objection.models.task.transaction(async (trx) => {
         await task.$relatedQuery('labels', trx).unrelate();
         await task.$query(trx).delete();
